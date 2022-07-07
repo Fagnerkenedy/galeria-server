@@ -16,11 +16,11 @@ app.use(queryParser())
 app.use(morgan('dev'))
 
 // Caminho das imagens quando salvas no disco.
-app.use('/files', express.static(path.resolve(__dirname, "..", "tmp", "uploads")))
+//app.use('/files', express.static(path.resolve(__dirname, "..", "tmp", "uploads")))
 
 app.use('/auth', require("./routes/userRoutes"))
 app.use('/gallery', require("./routes/galleryRoutes"))
-app.use('/posts', require("./routes/postRoutes"))
+//app.use('/posts', require("./routes/postRoutes"))
 
 server.listen(process.env.EXPRESS_PORT, () => {
     console.log(`Server has initiated on port ${process.env.EXPRESS_PORT}`)

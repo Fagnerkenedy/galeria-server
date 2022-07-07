@@ -7,11 +7,12 @@ const galleryController = require("../controller/galleryController")
 router.use(authMiddleware)
 
 // Gallery Routes
-router.get('/count', galleryController.count)
-router.get('/', galleryController.getGalleries)
-router.get('/:galleryId', galleryController.getById)
+router.get('/count/:user?', galleryController.count)
+router.get('/:user?/:galleryId?', galleryController.getGalleries)
+//router.get('/byId/:userId', galleryController.getById)
 
 router.post('/', galleryController.newGallery)
-router.put('/:galleryId', galleryController.updateGallery)
+router.put('/:galleryId/:userId', galleryController.updateGallery)
+router.get('/*', (req, res) => res.status(404).json({ success: false, message: 'Rota não encontrada!' }))
 
 module.exports = router

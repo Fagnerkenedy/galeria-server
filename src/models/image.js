@@ -6,8 +6,6 @@ const { promisify } = require('util')
 
 const s3 = new aws.S3()
 
-
-
 const ImageSchema = new mongoose.Schema({
     size: Number,
     key: String,

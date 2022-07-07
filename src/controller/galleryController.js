@@ -1,26 +1,53 @@
-
-const Galeria = require('../models/galeria')
+const User = require('../models/user')
+const Galeria = require('../models/gallery')
 const Image = require('../models/image')
 
 module.exports = {
     count: (req, res) => {
-        Galeria.count((err, value) => {
-            if(!err){
-                res.json({value})
+        const  user = req.params
+        if(!user)
+            return res.status(404).json({ success: false, message: 'Usuário não informado' })
+        
+        Galeria.count({ user: user }, (error, count) => {
+            if(!error){
+                res.status(200).json({ success: true, count })
             } else {
-                res.status(500).json({errors: [err]})
+                res.status(500).json({ success: false, message: [error] })
             }
         })
     },
 
     getGalleries: async (req, res) => {
-        try {
-            const galerias = await Galeria.find().populate('user').skip(req.query.skip).limit(req.query.limit)
 
-            return res.send({ galerias })
-        } catch (err) {
-            return res.status(400).send({ status: "error", message: "Houve um erro ao listar as galerias", retorno: err })
+        const { user, galleryId } = req.params
+
+        /*if(!user)
+            return res.status(404).json({ success: false, message: 'Usuário não informado' })*/
+
+        if(!galleryId){
+            try {
+                const galerias = await Galeria.find({ user }).populate('user').skip(req.query.skip).limit(req.query.limit)
+                if(!galerias || galerias == '')
+                    return res.status(404).json({ success: true, data: 'Nenhuma galeria encontrada' })
+                return res.status(200).json({ success: true, data: galerias })
+            } catch (error) {
+                return res.status(400).send({ success: false, message: "Houve um erro ao listar as galerias", error })
+            }
+        }else{
+
+            try {
+                const galeria = await Galeria.find( { _id: galleryId } )
+
+                if(!galeria || galeria == '')
+                    return res.status(404).json({ success: true, data: 'Nenhuma galeria encontrada' })
+
+                return res.status(200).json({ success: true, data: galeria })
+            } catch (error) {
+                return res.status(400).send({ success: false, message: "Houve um erro ao listar a galeria", error })
+            }
+
         }
+
     },
 
     getById: async (req, res) => {

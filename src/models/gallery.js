@@ -5,6 +5,11 @@ const GaleriaSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    contato: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Contato',
+        required: true,
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
