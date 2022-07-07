@@ -12,15 +12,13 @@ const User = require('../models/user')
 module.exports =  {
     // New User
     register: async (req, res) => {
+        console.log(req.body)
         const { email, sitename } = req.body
         try {
     
             if(await User.findOne({ email }))
-                return res.status(400).json({ success: false, message: 'User Already Exists!' })
+                return res.status(200).json({ success: false, message: 'User Already Exists!' })
             
-            if( await User.findOne({ sitename }))
-                return res.status(400).json({ success: true, message: 'Sitename Already Exists!' })
-    
             req.body.uuid = crypto.randomUUID()
 
             const user = await User.create(req.body)
@@ -29,6 +27,7 @@ module.exports =  {
     
             return res.status(200).json({ success: true, message: 'User Created Successfuly!' })
         }catch (err) {
+            console.log('Error Creating User', err)
             return res.status(400).json({ success: false, message: 'Error Creating User', error: err })
         }
     },

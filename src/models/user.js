@@ -26,7 +26,7 @@ const UserSchema = new mongoose.Schema({
     },
     sitename: { // sera usado para o subdomínio
         type: String,
-        required: true,
+        //required: true,
         lowercase: true,
     },
     verificado: { // campo para informar se o usuário confirmou seu email ou não.
