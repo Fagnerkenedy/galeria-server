@@ -25,3 +25,5 @@ app.use('/gallery', require("./routes/galleryRoutes"))
 server.listen(process.env.EXPRESS_PORT, () => {
     console.log(`Server has initiated on port ${process.env.EXPRESS_PORT}`)
 })
+
+

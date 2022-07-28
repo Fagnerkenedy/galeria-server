@@ -4,8 +4,9 @@ const Image = require('../models/image')
 
 module.exports = {
     count: (req, res) => {
-        const  user = req.params
-        if(!user)
+        const { user }  = req.params
+        console.log(user)
+        if(!user || user === undefined)
             return res.status(404).json({ success: false, message: 'Usuário não informado' })
         
         Galeria.count({ user: user }, (error, count) => {

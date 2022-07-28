@@ -68,7 +68,7 @@ module.exports =  {
             return res.status(400).json({ success: false, message: 'Invalid password!' })
         
         if(user.verificado !== true)
-            return res.status(400).json({ success: false, message: 'User Not Verified!' })
+            return res.status(400).json({ success: false, message: 'User Not Verified!', user })
 
         user.password = undefined
     
@@ -98,7 +98,7 @@ module.exports =  {
             to: req.body.email,
             replyTo: process.env.NODEMAILER_USER,
             subject: "Guêleria - Confirmação de cadastro",
-            text: "Obrigado por se cadastrar no nosso sistema, por favor confirme seu email clicando no link: http://localhost:3041/auth/confirmation/" + req.body.uuid,
+            text: "Obrigado por se cadastrar no nosso sistema, por favor confirme seu email clicando no link: http://localhost:3001/auth/confirmation/" + req.body.uuid,
         }).then(info => {
             res.status(200).json({ success: true, message: info })
         }).catch(error => {
