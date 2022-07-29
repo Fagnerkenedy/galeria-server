@@ -25,7 +25,7 @@ module.exports =  {
 
             user.password = undefined
     
-            return res.status(200).json({ success: true, message: 'User Created Successfuly!' })
+            return res.status(200).json({ success: true, message: 'User Created Successfuly!', user})
         }catch (err) {
             console.log('Error Creating User', err)
             return res.status(400).json({ success: false, message: 'Error Creating User', error: err })
@@ -48,9 +48,9 @@ module.exports =  {
         const { email } = req.body
         try {
             if(await User.findOne({ email }))
-                return res.status(200).json({ success: true, message: 'Email Already Exists!' })
+                return res.status(200).json({ success: false, message: 'Email Already Exists!' })
             
-            return res.status(200).json({ success: false, message: 'E-mail Not Found!' })
+            return res.status(200).json({ success: true, message: 'E-mail Not Found!' })
         } catch (error) {
             return res.status(400).json({ success: false, message: 'Error Searching E-mail', error: err })
         }
@@ -80,6 +80,7 @@ module.exports =  {
     },
 
     sendMailConfirmation: async (req, res) => {
+        console.log(req)
         const transporter = nodemailer.createTransport({
             host: process.env.NODEMAILER_SMTP,
             port: process.env.NODEMAILER_PORT,
@@ -97,8 +98,8 @@ module.exports =  {
             from: process.env.NODEMAILER_USER,
             to: req.body.email,
             replyTo: process.env.NODEMAILER_USER,
-            subject: "Guêleria - Confirmação de cadastro",
-            text: "Obrigado por se cadastrar no nosso sistema, por favor confirme seu email clicando no link: http://localhost:3001/auth/confirmation/" + req.body.uuid,
+            subject: "Photos2You - Confirmação de cadastro",
+            text: "Obrigado por se cadastrar no nosso sistema, por favor confirme seu email clicando no link: "+process.env.FRONT_URL+"/cadastro/confirmacao/" + req.body.uuid,
         }).then(info => {
             res.status(200).json({ success: true, message: info })
         }).catch(error => {
@@ -108,17 +109,17 @@ module.exports =  {
     },
 
     confirmation: async (req, res) => {
-        const uuid = req.body.uuid;
+        console.log(req.body)
+        const { uuid } = req.body;
 
         try {
 
             const user = await User.findOne({ uuid });
-            
             if(!user)
-                return res.status(400).json({ success: false, message: 'User not found!' })
+                return res.status(200).json({ success: false, message: 'user_not_found' })
 
             if(user.verificado)
-                return res.status(400).json({ success: false, message: 'User already confirmed!' })
+                return res.status(200).json({ success: false, message: 'user_already_confirmed' })
 
             user.verificado = true
             await user.save()
