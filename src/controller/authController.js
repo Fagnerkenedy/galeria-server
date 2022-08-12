@@ -62,13 +62,13 @@ module.exports =  {
         const user = await User.findOne({ email }).select('+password')
     
         if(!user)
-            return res.status(400).json({ success: false, message: 'User not found!' })
+            return res.status(200).json({ success: false, message: 'user_not_found' })
     
         if(!await bcrypt.compare(password, user.password))
-            return res.status(400).json({ success: false, message: 'Invalid password!' })
+            return res.status(200).json({ success: false, message: 'invalid_password' })
         
         if(user.verificado !== true)
-            return res.status(400).json({ success: false, message: 'User Not Verified!', user })
+            return res.status(200).json({ success: false, message: 'user_not_verified', user })
 
         user.password = undefined
     
@@ -76,7 +76,7 @@ module.exports =  {
             expiresIn: 604800,
         })
     
-        res.send({ user, token })
+        res.send({ success: true, message: 'Sucesso ao fazer login', user, token })
     },
 
     sendMailConfirmation: async (req, res) => {
@@ -123,7 +123,7 @@ module.exports =  {
 
             user.verificado = true
             await user.save()
-            res.status(200).json({ success:true, message: 'User Confirmed!' })
+            res.status(200).json({ success:true, message: 'user_confirmed' })
             
         } catch (error) {
             res.status(400).json({ error })
@@ -132,19 +132,10 @@ module.exports =  {
     },
 
     update: async (req, res) => {
-        console.log(req.body)
-        const { email } = req.body
+        const { uuid } = req.body
         try {
-            
-            if(await User.findOne({ email }))
-
-            req.body.uuid = crypto.randomUUID()
-
-            const user = await User.updateOne(req.body)
-            console.log("Chegou aqui");
-            user.password = undefined
-    
-            return res.status(200).json({ success: true, message: 'User Update Successfuly!', user})
+            const user = await User.findOneAndUpdate({ uuid }, req.body);
+            return res.status(200).json({ success: true, message: 'user_update_successfuly', user})
         }catch (err) {
             console.log('Error Creating User', err)
             return res.status(400).json({ success: false, message: 'Error Creating User', error: err })
