@@ -132,10 +132,10 @@ module.exports =  {
     },
 
     update: async (req, res) => {
-        const { uuid } = req.body
+        const { uuid } = req.params
         try {
             const user = await User.findOneAndUpdate({ uuid }, req.body);
-            return res.status(200).json({ success: true, message: 'user_update_successfuly', user})
+            return res.status(200).json({ success: true, message: 'user_update_successfuly', data: user})
         }catch (err) {
             console.log('Error Creating User', err)
             return res.status(400).json({ success: false, message: 'Error Creating User', error: err })
@@ -143,22 +143,16 @@ module.exports =  {
     },
 
     getUser: async (req, res) => {
-        console.log(req.body)
-        const { email } = req.body
+        const { uuid } = req.params
         try {
             
-            if(await User.findOne({ email }))
+            const user = await User.findOne({ uuid });
 
-            req.body.uuid = crypto.randomUUID()
+            if(user){
+                user.password = undefined
+                return res.status(200).json({ success: true, message: 'usuario_encontrado', data: user })
+            }
 
-            const user = await User(req.body)
-            console.log("Chegou aquiiiiiiiii");
-            
-            user.password = undefined
-
-    
-            return res.status(200).json({ success: true, message: 'User Update Successfulyyyyy!', user})
-            
         }catch (err) {
             console.log('Error Creating User', err)
             return res.status(400).json({ success: false, message: 'Error Creating User', error: err })
