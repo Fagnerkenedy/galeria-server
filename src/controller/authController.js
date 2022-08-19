@@ -158,5 +158,4 @@ module.exports =  {
             return res.status(400).json({ success: false, message: 'Error Creating User', error: err })
         }
     },
-
 }
