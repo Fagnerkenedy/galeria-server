@@ -17,8 +17,8 @@ router.post('/checkemail', authController.checkEmail)
 router.post('/mailconfirmation', authController.sendMailConfirmation)
 router.post('/confirmation', authController.confirmation)
 
-router.put('/update', authController.update)
+router.put('/update/:batata', authController.update)
 
-router.get('/myaccount', authController.getUser)
+router.get('/myaccount/:uuid', authController.getUser)
 
 module.exports = router
