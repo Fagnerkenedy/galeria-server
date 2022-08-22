@@ -17,7 +17,7 @@ router.post('/checkemail', authController.checkEmail)
 router.post('/mailconfirmation', authController.sendMailConfirmation)
 router.post('/confirmation', authController.confirmation)
 
-router.put('/update/:uuid', authController.update)
+router.put('/update/:batata', authController.update)
 
 router.get('/myaccount/:uuid', authController.getUser)
 
