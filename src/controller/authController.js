@@ -132,9 +132,9 @@ module.exports =  {
     },
 
     update: async (req, res) => {
-        console.log(req.params)
+        const { uuid } = req.params
         try {
-            const user = await User.findByIdAndUpdate( req.params.batata, {$set: req.body});
+            const user = await User.findOneAndUpdate({ uuid }, req.body);
             return res.status(200).json({ success: true, message: 'user_update_successfuly', data: user})
         }catch (err) {
             console.log('Error Creating User', err)
